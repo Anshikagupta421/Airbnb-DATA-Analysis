@@ -1,3 +1,4 @@
+
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html, Input, Output
@@ -52,9 +53,9 @@ if df.empty:
 # 3. CREATE DASH APP
 # ------------------------
 
-app = Dash(__name__)
+dash_app = Dash(__name__)
 
-app.layout = html.Div([
+dash_app.layout = html.Div([
     html.H1(
         "Airbnb Listings - Monterrey",
         style={'textAlign': 'center'}
@@ -102,7 +103,7 @@ app.layout = html.Div([
 # 4. CALLBACK
 # ------------------------
 
-@app.callback(
+@dash_app.callback(
     Output('airbnb-map', 'figure'),
     Output('count', 'children'),
     Input('night-slider', 'value'),
@@ -157,8 +158,14 @@ def update_graph(nights, price_range):
     return fig, f"Total Listings Displayed: {len(dff)}"
 
 # ------------------------
-# 5. RUN APP
+# 5. VERCEL ENTRY POINT
+# ------------------------
+
+app = dash_app.server
+
+# ------------------------
+# 6. RUN LOCALLY
 # ------------------------
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8006)
+    dash_app.run(debug=True, port=8006)
